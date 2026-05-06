@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toko Grosir</title>
+    <title>Toko Pinky Amelia Flora</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #f3f4f6;
+            --bg-color: #fdf2f8;
             --surface-color: #ffffff;
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
+            --primary-color: #ec4899;
+            --primary-hover: #db2777;
             --danger-color: #ef4444;
             --danger-hover: #dc2626;
             --text-main: #111827;
             --text-muted: #6b7280;
-            --border-color: #e5e7eb;
+            --border-color: #fbcfe8;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -45,7 +45,7 @@
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 1200px;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -170,7 +170,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
         }
 
         .btn {
@@ -211,7 +211,7 @@
         /* Product List */
         .product-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
         }
 
@@ -234,7 +234,7 @@
         .product-icon {
             width: 40px;
             height: 40px;
-            background: rgba(79, 70, 229, 0.1);
+            background: rgba(236, 72, 153, 0.1);
             color: var(--primary-color);
             border-radius: var(--radius-md);
             display: flex;
@@ -258,7 +258,7 @@
         }
 
         .badge {
-            background: rgba(79, 70, 229, 0.1);
+            background: rgba(236, 72, 153, 0.1);
             color: var(--primary-color);
             padding: 0.25rem 0.75rem;
             border-radius: var(--radius-full);
@@ -326,6 +326,9 @@
             .nav-tabs button {
                 border-radius: var(--radius-md);
             }
+            .product-list {
+                grid-template-columns: 1fr;
+            }
             .data-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -341,8 +344,8 @@
 
 <div class="container">
     <header class="header">
-        <h1><i class="fas fa-store"></i> Toko Grosir</h1>
-        <p>Sistem penjualan dan inventaris modern</p>
+        <h1><i class="fas fa-store"></i> Toko Pinky Amelia Flora</h1>
+        <p>Beli roti di toko ku untuk perbaiki moodmu 💖<br>Have a nice day!</p>
     </header>
 
     <div class="nav-tabs">
@@ -369,6 +372,10 @@
         <div class="form-group">
             <label for="stok"><i class="fas fa-cubes"></i> Stok Awal</label>
             <input type="number" id="stok" class="form-control" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+            <label for="harga"><i class="fas fa-money-bill-wave"></i> Harga (Rp)</label>
+            <input type="number" id="harga" class="form-control" placeholder="0" min="0">
         </div>
         <button onclick="tambah()" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Produk</button>
     </div>
@@ -416,8 +423,9 @@ function loadCustomer() {
                         <i class="fas fa-box"></i>
                     </div>
                     <div class="product-name">${item.nama_produk}</div>
-                    <div class="product-stock">
-                        <i class="fas fa-layer-group"></i> Stok Tersedia: <span class="badge">${item.stok}</span>
+                    <div class="product-stock" style="display:flex; justify-content:space-between; align-items:center; margin-top: 0.5rem;">
+                        <span><i class="fas fa-layer-group"></i> Stok: <span class="badge">${item.stok}</span></span>
+                        <strong style="color:var(--primary-color);">Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</strong>
                     </div>
                 </div>
             `;
@@ -432,9 +440,10 @@ function loadCustomer() {
 function tambah() {
     let nama = document.getElementById("nama").value.trim();
     let stok = document.getElementById("stok").value;
+    let harga = document.getElementById("harga").value;
 
-    if (!nama || !stok) {
-        alert("Mohon lengkapi nama produk dan stok!");
+    if (!nama || !stok || !harga) {
+        alert("Mohon lengkapi nama produk, stok, dan harga!");
         return;
     }
 
@@ -443,7 +452,7 @@ function tambah() {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `nama_produk=${encodeURIComponent(nama)}&stok=${stok}`
+        body: `nama_produk=${encodeURIComponent(nama)}&stok=${stok}&harga=${harga}`
     })
     .then(res => res.json())
     .then(res => {
@@ -452,6 +461,7 @@ function tambah() {
         // Reset form
         document.getElementById("nama").value = "";
         document.getElementById("stok").value = "";
+        document.getElementById("harga").value = "";
         
         // Refresh data in background
         loadCustomer();
@@ -484,7 +494,7 @@ function loadPegawai() {
                         </div>
                         <div class="data-item-details">
                             <h4>${item.nama_produk}</h4>
-                            <p>Total Stok: <strong>${item.stok}</strong></p>
+                            <p>Stok: <strong>${item.stok}</strong> | Harga: <strong>Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</strong></p>
                         </div>
                     </div>
                     <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-top: 0.5rem;">

@@ -20,8 +20,9 @@ if ($aksi == "" || $aksi == "get") {
 elseif ($aksi == "tambah") {
     $nama = $_POST['nama_produk'];
     $stok = $_POST['stok'];
+    $harga = isset($_POST['harga']) ? $_POST['harga'] : 0;
 
-    mysqli_query($koneksi, "INSERT INTO produk (nama_produk, stok) VALUES ('$nama', '$stok')");
+    mysqli_query($koneksi, "INSERT INTO produk (nama_produk, stok, harga) VALUES ('$nama', '$stok', '$harga')");
 
     echo json_encode(["pesan" => "Data berhasil ditambahkan"]);
 }
